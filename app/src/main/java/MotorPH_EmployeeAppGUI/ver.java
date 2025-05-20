@@ -211,7 +211,7 @@ public class ver extends javax.swing.JFrame {
             }
             LocalTime loginTime = LocalTime.parse(LGITmph.getText());
             LocalTime logoutTime = LocalTime.parse(LGOTmph.getText());
-            if (logoutTime.getHour() < 6) {
+            if (logoutTime.getHour() <= 6) {
                 logoutTime = logoutTime.plusHours(12);
             }
             LocalTime gracePeriodEnd = LocalTime.of(8, 10);
