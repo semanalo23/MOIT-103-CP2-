@@ -7,6 +7,7 @@ package MotorPH_EmployeeAppGUI;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Period;
 import java.time.format.DateTimeParseException;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -203,17 +204,34 @@ public class ver extends javax.swing.JFrame {
             }
             String empName = employeeMap.get(empNum);
             LocalDate birthDate = LocalDate.parse(BirthDate.getText());
+            int age = Period.between(birthDate, LocalDate.now()).getYears();
             double hourlyRate = Double.parseDouble(HourlySalaryRate.getText());
             if (hourlyRate < 100 || hourlyRate > 600) {
                 throw new IllegalArgumentException("❌ Error: Hourly Rate must be between 100 and 600.");
             }
             LocalTime loginTime = LocalTime.parse(LGITmph.getText());
             LocalTime logoutTime = LocalTime.parse(LGOTmph.getText());
-
+            if (logoutTime.getHour() < 6) {
+                logoutTime = logoutTime.plusHours(12);
+            }
+            LocalTime gracePeriodEnd = LocalTime.of(8, 10);
+            double lateDeduction = 0.0;
+            boolean isLate = loginTime.isAfter(gracePeriodEnd);
+            if (isLate) {
+                // Calculate minutes late
+                long minutesLate = Duration.between(gracePeriodEnd, loginTime).toMinutes();
+                double perMinuteRate = hourlyRate / 60.0;
+                double multiplier = 1.5;
+                lateDeduction = minutesLate * perMinuteRate * multiplier;
+            }
             // ✅ Calculate hours worked
             long hoursWorked = Duration.between(loginTime, logoutTime).toHours();
             if (hoursWorked < 0) {
                 throw new ArithmeticException("Invalid pay coverage. Please ensure the logout time is after the login time.");
+            }
+            if (hoursWorked > 1) {
+                hoursWorked -= 1;
+                System.out.println("Lunch break deduction applied (-1 hour).");
             }
             double basicSalary = hoursWorked * hourlyRate;
 
@@ -222,12 +240,14 @@ public class ver extends javax.swing.JFrame {
             double philhealth = basicSalary * 0.03;
             double pagibig = 100.00;
             double tax = basicSalary * 0.10;
-            double netPay = basicSalary - (sss + philhealth + pagibig + tax);
+            double totalDeductions = sss + philhealth + pagibig + tax + lateDeduction;
+            double netPay = basicSalary - totalDeductions;
 
             String output = String.format("""
         Employee Name: %s
         Employee ID: %d
         Birth Date: %s
+        Age: %d                                  
         Hours Worked: %d
         Hourly Rate: PHP %.2f
         ----------------------------
@@ -238,12 +258,14 @@ public class ver extends javax.swing.JFrame {
           PhilHealth: PHP %.2f
           Pag-IBIG:   PHP %.2f
           Tax:        PHP %.2f
+          Late Deduction:  PHP %.2f                                
         ----------------------------
         Net Pay: PHP %.2f
         """,
                     empName,
                     empNum,
                     birthDate,
+                    age,
                     hoursWorked,
                     hourlyRate,
                     basicSalary,
@@ -251,6 +273,7 @@ public class ver extends javax.swing.JFrame {
                     philhealth,
                     pagibig,
                     tax,
+                    lateDeduction,
                     netPay
             );
 
