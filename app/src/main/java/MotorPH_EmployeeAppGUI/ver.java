@@ -215,17 +215,8 @@ public class ver extends javax.swing.JFrame {
             if (logoutTime.getHour() <= 6) {
                 logoutTime = logoutTime.plusHours(12);
             }
-            LocalTime gracePeriodEnd = LocalTime.of(8, 10);
-            double lateDeduction = 0.0;
-            boolean isLate = loginTime.isAfter(gracePeriodEnd);
-            if (isLate) {
-                // Calculate minutes late
-                long minutesLate = Duration.between(gracePeriodEnd, loginTime).toMinutes();
-                double perMinuteRate = hourlyRate / 60.0;
-                double multiplier = 1.5;
-                lateDeduction = minutesLate * perMinuteRate * multiplier;
-            }
             // ✅ Calculate hours worked
+            double lateDeduction = calculateLateDeduction(loginTime, hourlyRate);
             long hoursWorked = Duration.between(loginTime, logoutTime).toHours();
             if (hoursWorked < 0) {
                 throw new ArithmeticException("Invalid pay coverage. Please ensure the logout time is after the login time.");
@@ -296,6 +287,20 @@ public class ver extends javax.swing.JFrame {
                     "System Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_computebtnActionPerformed
+
+    private double calculateLateDeduction(LocalTime loginTime, double hourlyRate) {
+        // Define the grace period (8:10 AM)
+        LocalTime gracePeriodEnd = LocalTime.of(8, 10);
+
+        // If login is after the grace period, compute the late deduction.
+        if (loginTime.isAfter(gracePeriodEnd)) {
+            long minutesLate = Duration.between(gracePeriodEnd, loginTime).toMinutes();
+            double perMinuteRate = hourlyRate / 60.0;
+            double multiplier = 1.5;
+            return minutesLate * perMinuteRate * multiplier;
+        }
+        return 0.0;
+    }
 
     /**
      * @param args the command line arguments
