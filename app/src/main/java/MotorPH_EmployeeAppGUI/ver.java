@@ -205,7 +205,6 @@ public class ver extends javax.swing.JFrame {
             }
             String empName = employeeMap.get(empNum);
             LocalDate birthDate = LocalDate.parse(BirthDate.getText());
-            int age = Period.between(birthDate, LocalDate.now()).getYears();
             double hourlyRate = Double.parseDouble(HourlySalaryRate.getText());
             if (hourlyRate < 100 || hourlyRate > 600) {
                 throw new IllegalArgumentException("❌ Error: Hourly Rate must be between 100 and 600.");
@@ -215,17 +214,15 @@ public class ver extends javax.swing.JFrame {
             if (logoutTime.getHour() <= 6) {
                 logoutTime = logoutTime.plusHours(12);
             }
-            // ✅ Calculate hours worked
-            double lateDeduction = calculateLateDeduction(loginTime, hourlyRate);
+            double effectiveHours = calculateEffectiveHoursWorked(loginTime, logoutTime);
             long hoursWorked = Duration.between(loginTime, logoutTime).toHours();
-            if (hoursWorked < 0) {
-                throw new ArithmeticException("Invalid pay coverage. Please ensure the logout time is after the login time.");
-            }
-            if (hoursWorked > 1) {
-                hoursWorked -= 1;
-                System.out.println("Lunch break deduction applied (-1 hour).");
-            }
-            double basicSalary = hoursWorked * hourlyRate;
+            double lateDeduction = calculateLateDeduction(loginTime, hourlyRate);
+            double regularHours = Math.min(effectiveHours, 8.0);
+            double overtimeHours = effectiveHours > 8.0 ? effectiveHours - 8.0 : 0.0;
+
+            // ✅ Calculate hours worked 
+            double overtimePay = overtimeHours * hourlyRate * 1.5;
+            double basicSalary = (regularHours * hourlyRate) + overtimePay;
 
             // ✅ Apply deductions
             double sss = basicSalary * 0.045;
@@ -234,33 +231,41 @@ public class ver extends javax.swing.JFrame {
             double tax = basicSalary * 0.10;
             double totalDeductions = sss + philhealth + pagibig + tax + lateDeduction;
             double netPay = basicSalary - totalDeductions;
+            int age = Period.between(birthDate, LocalDate.now()).getYears();
 
             String output = String.format("""
-        Employee Name: %s
-        Employee ID: %d
-        Birth Date: %s
-        Age: %d                                  
-        Hours Worked: %d
-        Hourly Rate: PHP %.2f
-        ----------------------------
-        Gross Salary: PHP %.2f
-
-        Deductions:
-          SSS:        PHP %.2f
-          PhilHealth: PHP %.2f
-          Pag-IBIG:   PHP %.2f
-          Tax:        PHP %.2f
-          Late Deduction:  PHP %.2f                                
-        ----------------------------
-        Net Pay: PHP %.2f
-        """,
+            Employee Name: %s
+            Employee ID: %d
+            Birth Date: %s
+            Age: %d
+            Effective Hours Worked (after lunch): %.2f
+            Regular Hours: %.2f
+            Overtime Hours: %.2f
+            Hourly Rate: PHP %.2f
+            ----------------------------
+            Gross Salary: PHP %.2f
+                (Regular Pay: PHP %.2f, Overtime Pay: PHP %.2f)
+    
+            Deductions:
+                SSS:           PHP %.2f
+                PhilHealth:    PHP %.2f
+                Pag-IBIG:      PHP %.2f
+                Tax:           PHP %.2f
+                Late Deduction: PHP %.2f
+            ----------------------------
+             Net Pay: PHP %.2f
+                    """,
                     empName,
                     empNum,
                     birthDate,
                     age,
-                    hoursWorked,
+                    effectiveHours,
+                    regularHours,
+                    overtimeHours,
                     hourlyRate,
                     basicSalary,
+                    (regularHours * hourlyRate),
+                    overtimePay,
                     sss,
                     philhealth,
                     pagibig,
@@ -269,22 +274,22 @@ public class ver extends javax.swing.JFrame {
                     netPay
             );
 
-            // ✅ Show payroll summary
+            // --- Display the combined output in one dialog ---
             JOptionPane.showMessageDialog(this, output, "Payroll Summary", JOptionPane.INFORMATION_MESSAGE);
+
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "❌ Error: Please enter a numeric Employee ID!",
+            JOptionPane.showMessageDialog(this, "❌ Error: Please enter a numeric Employee ID and valid numbers for other numeric fields!",
                     "Input Error", JOptionPane.ERROR_MESSAGE);
         } catch (IllegalArgumentException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Validation Error", JOptionPane.ERROR_MESSAGE);
         } catch (ArithmeticException ex) {
-            // Handles invalid pay coverage (e.g., logout before login)
             JOptionPane.showMessageDialog(this, "❌ Error: " + ex.getMessage(), "Calculation Error", JOptionPane.ERROR_MESSAGE);
         } catch (DateTimeParseException ex) {
-            JOptionPane.showMessageDialog(this, "❌ Error: Use correct formats (YYYY-MM-DD for Birth Date, HH:MM for time).",
+            JOptionPane.showMessageDialog(this, "❌ Error: Use correct formats (YYYY-MM-DD for Birth Date, HH:MM for times).",
                     "Input Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "❌ Unexpected Error: " + ex.getMessage(),
-                    "System Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "❌ Unexpected Error: " + ex.getMessage(), "System Error", JOptionPane.ERROR_MESSAGE);
+
         }
     }//GEN-LAST:event_computebtnActionPerformed
 
@@ -300,6 +305,25 @@ public class ver extends javax.swing.JFrame {
             return minutesLate * perMinuteRate * multiplier;
         }
         return 0.0;
+    }
+
+    private double calculateEffectiveHoursWorked(LocalTime loginTime, LocalTime logoutTime) {
+        // Get the total duration in minutes.
+        long totalMinutes = Duration.between(loginTime, logoutTime).toMinutes();
+
+        if (totalMinutes < 0) {
+            throw new ArithmeticException("Invalid pay coverage: logout time is before login time.");
+        }
+
+        // Deduct lunch break minutes (if worked more than 60 minutes, subtract a 60-minute lunch).
+        if (totalMinutes > 60) {
+            totalMinutes -= 60;  // Deduct 60 minutes for the lunch break.
+            System.out.println("Lunch break deduction applied (-60 minutes).");
+        }
+
+        // Convert the remaining minutes into hours as a double.
+        double effectiveHours = totalMinutes / 60.0;
+        return effectiveHours;
     }
 
     /**
