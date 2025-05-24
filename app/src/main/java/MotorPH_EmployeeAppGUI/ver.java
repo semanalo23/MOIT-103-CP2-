@@ -214,65 +214,15 @@ public class ver extends javax.swing.JFrame {
             if (logoutTime.getHour() <= 6) {
                 logoutTime = logoutTime.plusHours(12);
             }
-            double effectiveHours = calculateEffectiveHoursWorked(loginTime, logoutTime);
-            long hoursWorked = Duration.between(loginTime, logoutTime).toHours();
-            double lateDeduction = calculateLateDeduction(loginTime, hourlyRate);
-            double regularHours = Math.min(effectiveHours, 8.0);
-            double overtimeHours = effectiveHours > 8.0 ? effectiveHours - 8.0 : 0.0;
+            
+            //Creating a Payroll Data object
+           MPH_DataGathering data = new MPH_DataGathering(empNum, empName, birthDate, hourlyRate, loginTime, logoutTime);
 
-            // ✅ Calculate hours worked 
-            double overtimePay = overtimeHours * hourlyRate * 1.5;
-            double basicSalary = (regularHours * hourlyRate) + overtimePay;
+            //Creating a Payroll Calculator object with the handed-off data
+            MPH_PayrollCalculator_Logic calculator = new MPH_PayrollCalculator_Logic(data);
 
-            // ✅ Apply deductions
-            double sss = basicSalary * 0.045;
-            double philhealth = basicSalary * 0.03;
-            double pagibig = 100.00;
-            double tax = basicSalary * 0.10;
-            double totalDeductions = sss + philhealth + pagibig + tax + lateDeduction;
-            double netPay = basicSalary - totalDeductions;
-            int age = Period.between(birthDate, LocalDate.now()).getYears();
-
-            String output = String.format("""
-            Employee Name: %s
-            Employee ID: %d
-            Birth Date: %s
-            Age: %d
-            Effective Hours Worked (after lunch): %.2f
-            Regular Hours: %.2f
-            Overtime Hours: %.2f
-            Hourly Rate: PHP %.2f
-            ----------------------------
-            Gross Salary: PHP %.2f
-                (Regular Pay: PHP %.2f, Overtime Pay: PHP %.2f)
-    
-            Deductions:
-                SSS:           PHP %.2f
-                PhilHealth:    PHP %.2f
-                Pag-IBIG:      PHP %.2f
-                Tax:           PHP %.2f
-                Late Deduction: PHP %.2f
-            ----------------------------
-             Net Pay: PHP %.2f
-                    """,
-                    empName,
-                    empNum,
-                    birthDate,
-                    age,
-                    effectiveHours,
-                    regularHours,
-                    overtimeHours,
-                    hourlyRate,
-                    basicSalary,
-                    (regularHours * hourlyRate),
-                    overtimePay,
-                    sss,
-                    philhealth,
-                    pagibig,
-                    tax,
-                    lateDeduction,
-                    netPay
-            );
+            //Sending out the Payroll Summary (String Output)
+            String output = calculator.formatPayrollSummary();
 
             // --- Display the combined output in one dialog ---
             JOptionPane.showMessageDialog(this, output, "Payroll Summary", JOptionPane.INFORMATION_MESSAGE);
@@ -292,39 +242,6 @@ public class ver extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_computebtnActionPerformed
-
-    private double calculateLateDeduction(LocalTime loginTime, double hourlyRate) {
-        // Define the grace period (8:10 AM)
-        LocalTime gracePeriodEnd = LocalTime.of(8, 10);
-
-        // If login is after the grace period, compute the late deduction.
-        if (loginTime.isAfter(gracePeriodEnd)) {
-            long minutesLate = Duration.between(gracePeriodEnd, loginTime).toMinutes();
-            double perMinuteRate = hourlyRate / 60.0;
-            double multiplier = 1.5;
-            return minutesLate * perMinuteRate * multiplier;
-        }
-        return 0.0;
-    }
-
-    private double calculateEffectiveHoursWorked(LocalTime loginTime, LocalTime logoutTime) {
-        // Get the total duration in minutes.
-        long totalMinutes = Duration.between(loginTime, logoutTime).toMinutes();
-
-        if (totalMinutes < 0) {
-            throw new ArithmeticException("Invalid pay coverage: logout time is before login time.");
-        }
-
-        // Deduct lunch break minutes (if worked more than 60 minutes, subtract a 60-minute lunch).
-        if (totalMinutes > 60) {
-            totalMinutes -= 60;  // Deduct 60 minutes for the lunch break.
-            System.out.println("Lunch break deduction applied (-60 minutes).");
-        }
-
-        // Convert the remaining minutes into hours as a double.
-        double effectiveHours = totalMinutes / 60.0;
-        return effectiveHours;
-    }
 
     /**
      * @param args the command line arguments
