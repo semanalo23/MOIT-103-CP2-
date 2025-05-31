@@ -17,12 +17,16 @@ public class MPH_EmployeeClassList {
     public static final int PHILHEALTH_INDEX = 4;
     public static final int TIN_INDEX = 5;
     public static final int PAGIBIG_INDEX = 6;
+    public static final int DOB_INDEX = 7;
+    public static final int DEPARTMENT_INDEX = 8;
+    public static final int HOURLY_RATE_INDEX = 9;
 
     private String[] details;
 
     public MPH_EmployeeClassList(String employeeNumber, String lastName, String firstName,
-            String sssNumber, String philHealthNumber, String tin, String pagIbigNumber) {
-        details = new String[7];
+            String sssNumber, String philHealthNumber, String tin,
+            String pagIbigNumber, String dateOfBirth, String department, String hourlyRate) {
+        details = new String[10];
         details[EMPLOYEE_NUMBER_INDEX] = employeeNumber;
         details[LAST_NAME_INDEX] = lastName;
         details[FIRST_NAME_INDEX] = firstName;
@@ -30,6 +34,9 @@ public class MPH_EmployeeClassList {
         details[PHILHEALTH_INDEX] = philHealthNumber;
         details[TIN_INDEX] = tin;
         details[PAGIBIG_INDEX] = pagIbigNumber;
+        details[DOB_INDEX] = dateOfBirth;
+        details[DEPARTMENT_INDEX] = department;
+        details[HOURLY_RATE_INDEX] = hourlyRate;
     }
 
     // Getters:
@@ -59,5 +66,18 @@ public class MPH_EmployeeClassList {
 
     public String getPagIbig() {
         return details[PAGIBIG_INDEX];
+
+    }
+
+    public String getDateOfBirth() {
+        return details[DOB_INDEX];
+    }
+
+    public String getDepartment() {
+        return details[DEPARTMENT_INDEX];
+    }
+
+    public String getHourlyRate() {
+        return details[HOURLY_RATE_INDEX];
     }
 }
