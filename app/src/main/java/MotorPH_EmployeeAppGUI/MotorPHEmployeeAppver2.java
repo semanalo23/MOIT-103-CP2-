@@ -4,6 +4,7 @@
  */
 package MotorPH_EmployeeAppGUI;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
@@ -19,19 +20,7 @@ public class MotorPHEmployeeAppver2 extends javax.swing.JFrame {
     public MotorPHEmployeeAppver2() {
         initComponents();
 
-        MPH_EmployeeManagerDatabase db = new MPH_EmployeeManagerDatabase();
-
-        // Create your table model passing the list of employees
-        MPH_EmployeeTableModel_ArrayList employeeModel = new MPH_EmployeeTableModel_ArrayList(db.getEmployees());
-
-        // Create a JTable with your custom model
-        JTable employeeTable = new JTable(employeeModel);
-
-        // Optionally, set row selection mode or other table properties
-        employeeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        // Set the JTable as the viewport view of your JScrollPane
-        jScrollPane1.setViewportView(employeeTable);
+        initializeViewEmployee();
     }
 
     /**
@@ -76,6 +65,35 @@ public class MotorPHEmployeeAppver2 extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void initializeViewEmployee() {
+        // Create your database manager and table model.
+        MPH_EmployeeManagerDatabase db = new MPH_EmployeeManagerDatabase();
+        MPH_EmployeeTableModel_ArrayList employeeModel = new MPH_EmployeeTableModel_ArrayList(db.getEmployees());
+
+        // Create the JTable with your custom table model.
+        JTable employeeTable = new JTable(employeeModel);
+        employeeTable.setRowHeight(30); // For example, set a custom row height
+        employeeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Add a mouse listener for double-click detection.
+        employeeTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (evt.getClickCount() == 2) {  // Upon a double-click...
+                    int selectedRow = employeeTable.getSelectedRow();
+                    if (selectedRow >= 0) {
+                        int modelRow = employeeTable.convertRowIndexToModel(selectedRow);
+                        MPH_EmployeeClassList selectedEmployee = employeeModel.getEmployeeAt(modelRow);
+                        // Open the details frame with compute pay functionality.
+                        new MotorPH_EmployeeDetails_withPay(selectedEmployee).setVisible(true);
+                    }
+                }
+            }
+        });
+        // Finally, attach the table to the scroll pane that you added via the GUI.
+        jScrollPane1.setViewportView(employeeTable);
+    }
 
     /**
      * @param args the command line arguments

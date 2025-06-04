@@ -70,4 +70,7 @@ public class MPH_EmployeeTableModel_ArrayList extends AbstractTableModel {
         System.out.println("getValueAt(row=" + rowIndex + ", col=" + columnIndex + ") = " + value);
         return value;
     }
+    public MPH_EmployeeClassList getEmployeeAt (int rowIndex){
+        return employees.get(rowIndex);
+    }
 }
