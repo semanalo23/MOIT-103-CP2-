@@ -4,10 +4,19 @@
  */
 package MotorPH_EmployeeAppGUI;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MPH_EmployeeManagerDatabase {
+
+    private static MPH_EmployeeManagerDatabase instance;
 
     // The ArrayList holding all employee records.
     private List<MPH_EmployeeClassList> employees;
@@ -15,7 +24,24 @@ public class MPH_EmployeeManagerDatabase {
     // Constructor automatically initializes and loads data.
     public MPH_EmployeeManagerDatabase() {
         employees = new ArrayList<>();
-        loadEmployeeData();
+        loadEmployeesFromCSV();
+    }
+
+    public static MPH_EmployeeManagerDatabase getInstance() {
+        if (instance == null) {
+            instance = new MPH_EmployeeManagerDatabase();
+        }
+        return instance;
+    }
+    // Adds a new employee to the list
+
+    public void addEmployee(MPH_EmployeeClassList emp) {
+        employees.add(emp);
+    }
+
+    // Returns the complete list of employees.
+    public List<MPH_EmployeeClassList> getEmployees() {
+        return employees;
     }
 
     // Loads all employee data into the list.
@@ -124,14 +150,98 @@ public class MPH_EmployeeManagerDatabase {
                 "874042259378", "1990-08-07", "Customer Service and Relations", "313.51"));
     }
 
-    // Adds a new employee to the list.
-    public void addEmployee(MPH_EmployeeClassList emp) {
-        employees.add(emp);
+    /**
+     * Loads employee records from the CSV file "employees.csv" into the
+     * in-memory list. Expects the first line of the CSV to be a header row.
+     */
+    private void loadEmployeesFromCSV() {
+        String filePath = "employees.csv";  // Adjust the path if necessary.
+        File csvFile = new File(filePath);
+        if (!csvFile.exists()) {
+            System.out.println("CSV file not found: " + csvFile.getAbsolutePath());
+            return; // No file, so nothing to load.
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            String line;
+            boolean isFirstLine = true;  // Used to skip the header row.
+            int lineNumber = 0;
+            while ((line = br.readLine()) != null) {
+                lineNumber++;
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;  // Skip the header row.
+                }
+                // Skip empty lines.
+                if (line.trim().isEmpty()) {
+                    System.out.println("Skipping empty line at " + lineNumber);
+                    continue;
+                }
+                // Split the line into fields.
+                String[] data = line.split(",");
+                if (data.length != 10) {
+                    System.out.println("Skipping line " + lineNumber
+                            + " (unexpected number of columns): " + line);
+                    continue;
+                }
+                // Trim fields to remove any extra white space.
+                for (int i = 0; i < data.length; i++) {
+                    data[i] = data[i].trim();
+                }
+                // Create a new employee instance using the CSV data.
+                MPH_EmployeeClassList employee = new MPH_EmployeeClassList(
+                        data[0], // EmployeeID
+                        data[1], // LastName
+                        data[2], // FirstName
+                        data[3], // SSS
+                        data[4], // PhilHealth
+                        data[5], // TIN
+                        data[6], // PagIbig
+                        data[7], // DOB
+                        data[8], // Department
+                        data[9] // HourlyRate
+                );
+                employees.add(employee);
+                System.out.println("Loaded employee (line " + lineNumber + "): "
+                        + data[2] + " " + data[1]);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    // Returns the complete list of employees.
-    public List<MPH_EmployeeClassList> getEmployees() {
-        return employees;
+    /**
+     * Appends a new employee record to the CSV file. This method creates the
+     * CSV file with a header if it doesn't already exist.
+     *
+     * @param newEmployee the employee object to append.
+     */
+    public void writeEmployeeToCSV(MPH_EmployeeClassList newEmployee) {
+        String filePath = "employees.csv";
+        File csvFile = new File(filePath);
+
+        // If the CSV file doesn't exist, create it and write the header.
+        if (!csvFile.exists()) {
+            try (PrintWriter writer = new PrintWriter(new FileWriter(csvFile))) {
+                writer.println("EmployeeID,LastName,FirstName,SSS,PhilHealth,TIN,PagIbig,DOB,Department,HourlyRate");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        // Append the new employee record using try-with-resources.
+        try (FileWriter fw = new FileWriter(filePath, true); BufferedWriter bw = new BufferedWriter(fw); PrintWriter out = new PrintWriter(bw)) {
+            out.println(newEmployee.getEmployeeNumber() + ","
+                    + newEmployee.getLastName() + ","
+                    + newEmployee.getFirstName() + ","
+                    + newEmployee.getSssNumber() + ","
+                    + newEmployee.getPhilHealth() + ","
+                    + newEmployee.getTin() + ","
+                    + newEmployee.getPagIbig() + ","
+                    + newEmployee.getDateOfBirth() + ","
+                    + newEmployee.getDepartment() + ","
+                    + newEmployee.getHourlyRate());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Helper method to print employee details (for debugging/testing).
@@ -152,6 +262,7 @@ public class MPH_EmployeeManagerDatabase {
 
     // Main method for standalone testing
     public static void main(String[] args) {
+        System.out.println("CSV absolute path: " + new File("employees.csv").getAbsolutePath());
         MPH_EmployeeManagerDatabase manager = new MPH_EmployeeManagerDatabase();
         manager.printAllEmployees();
     }

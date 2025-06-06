@@ -13,6 +13,8 @@ import javax.swing.ListSelectionModel;
  * @author ASPIRE 7
  */
 public class MotorPHEmployeeAppver2 extends javax.swing.JFrame {
+    
+    private MPH_EmployeeTableModel_ArrayList employeeModel;
 
     /**
      * Creates new form MotorPHEmployeeAppver2
@@ -34,23 +36,38 @@ public class MotorPHEmployeeAppver2 extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jLabel1 = new javax.swing.JLabel();
+        NewEmployeebtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MotorPH Employee App v.2");
 
         jLabel1.setText("MotorPH Employee List");
 
+        NewEmployeebtn.setBackground(new java.awt.Color(255, 0, 0));
+        NewEmployeebtn.setForeground(new java.awt.Color(153, 255, 255));
+        NewEmployeebtn.setText("New Employee");
+        NewEmployeebtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewEmployeebtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 502, Short.MAX_VALUE)))
+                        .addGap(14, 14, 14)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 502, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(NewEmployeebtn)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -60,11 +77,29 @@ public class MotorPHEmployeeAppver2 extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(4, 4, 4)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(NewEmployeebtn)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void NewEmployeebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewEmployeebtnActionPerformed
+        // TODO add your handling code here:
+             // Open the CreateEmployeeFrame when the button is clicked.
+    MotorPH_CreateEmployeeForm createFrame = new MotorPH_CreateEmployeeForm();
+    createFrame.setVisible(true);
+
+    // Optional: add a WindowListener to refresh the table when createFrame is closed.
+    createFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosed(java.awt.event.WindowEvent e) {
+            // Refresh the JTable's model.
+            employeeModel.fireTableDataChanged();
+        }
+    });
+    }//GEN-LAST:event_NewEmployeebtnActionPerformed
 
     private void initializeViewEmployee() {
         // Create your database manager and table model.
@@ -139,6 +174,7 @@ public class MotorPHEmployeeAppver2 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton NewEmployeebtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
