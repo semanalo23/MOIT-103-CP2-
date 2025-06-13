@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -227,8 +228,23 @@ public class MPH_EmployeeManagerDatabase {
                 e.printStackTrace();
             }
         }
+        boolean needsNewline = false;
+        if (csvFile.exists() && csvFile.length() > 0) {
+            try (RandomAccessFile raf = new RandomAccessFile(csvFile, "r")) {
+                raf.seek(csvFile.length() - 1);
+                byte lastByte = raf.readByte();
+                if (lastByte != '\n' && lastByte != '\r') {
+                    needsNewline = true;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         // Append the new employee record using try-with-resources.
         try (FileWriter fw = new FileWriter(filePath, true); BufferedWriter bw = new BufferedWriter(fw); PrintWriter out = new PrintWriter(bw)) {
+            if (needsNewline) {
+                out.println();
+            }
             out.println(newEmployee.getEmployeeNumber() + ","
                     + newEmployee.getLastName() + ","
                     + newEmployee.getFirstName() + ","

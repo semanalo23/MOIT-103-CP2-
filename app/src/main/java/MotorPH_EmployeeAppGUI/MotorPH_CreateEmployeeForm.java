@@ -215,29 +215,12 @@ public class MotorPH_CreateEmployeeForm extends javax.swing.JFrame {
         MPH_EmployeeClassList newEmployee = new MPH_EmployeeClassList(
                 empID, lastName, firstName, sss, philHealth, tin, pagIbig, dob, department, hourlyRate
         );
-
-        // Define the CSV file path (adjust the path if necessary)
-        String filePath = "employees.csv";
-
-        // Ensure the CSV file exists (create it with header if not)
-        ensureCSVFileExists(filePath);
-
-        // Append the new employee's data to the CSV file using try-with-resources
-        try (FileWriter fw = new FileWriter(filePath, true); BufferedWriter bw = new BufferedWriter(fw); PrintWriter out = new PrintWriter(bw)) {
-
-            // CSV format must match the header column order
-            out.println(empID + "," + lastName + "," + firstName + ","
-                    + sss + "," + philHealth + "," + tin + "," + pagIbig + ","
-                    + dob + "," + department + "," + hourlyRate);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Error saving employee: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
         // Add the new employee to your in-memory database
         MPH_EmployeeManagerDatabase.getInstance().addEmployee(newEmployee);
-
+        
+        MPH_EmployeeManagerDatabase db = MPH_EmployeeManagerDatabase.getInstance();
+        db.writeEmployeeToCSV(newEmployee);
+        
         // Inform the user about the successful addition
         JOptionPane.showMessageDialog(this, "Employee added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
