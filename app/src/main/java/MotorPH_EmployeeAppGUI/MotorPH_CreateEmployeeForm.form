@@ -144,9 +144,6 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JTextField" name="txtEmployeeID">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField1"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
@@ -154,14 +151,8 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtFirstName">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField2"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtLastName">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField3"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
@@ -174,9 +165,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtSSS">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField4"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
@@ -184,9 +172,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtPagIbig">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField5"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>
@@ -194,19 +179,10 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtDOB">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField6"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtDepartment">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField7"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtHourlyRate">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField8"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jButton1">
       <Properties>
@@ -249,9 +225,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtTIN">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField1"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
@@ -259,9 +232,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtPhilHealth">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField1"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel10">
       <Properties>

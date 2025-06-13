@@ -59,31 +59,15 @@ public class MotorPH_CreateEmployeeForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Create New Employee - MPH");
 
-        txtEmployeeID.setText("jTextField1");
-
         jLabel1.setText("Employee ID");
-
-        txtFirstName.setText("jTextField2");
-
-        txtLastName.setText("jTextField3");
 
         jLabel3.setText("First Name");
 
         jLabel4.setText("Last Name");
 
-        txtSSS.setText("jTextField4");
-
         jLabel5.setText("SSS Number");
 
-        txtPagIbig.setText("jTextField5");
-
         jLabel6.setText("Pag-Ibig Number/HDMF");
-
-        txtDOB.setText("jTextField6");
-
-        txtDepartment.setText("jTextField7");
-
-        txtHourlyRate.setText("jTextField8");
 
         jButton1.setBackground(new java.awt.Color(0, 153, 0));
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
@@ -104,11 +88,7 @@ public class MotorPH_CreateEmployeeForm extends javax.swing.JFrame {
 
         jLabel9.setText("Hourly Rate");
 
-        txtTIN.setText("jTextField1");
-
         jLabel2.setText("TIN");
-
-        txtPhilHealth.setText("jTextField1");
 
         jLabel10.setText("PhilHealth");
 

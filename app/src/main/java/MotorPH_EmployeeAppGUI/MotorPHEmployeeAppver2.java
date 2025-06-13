@@ -43,8 +43,8 @@ public class MotorPHEmployeeAppver2 extends javax.swing.JFrame {
 
         jLabel1.setText("MotorPH Employee List");
 
-        NewEmployeebtn.setBackground(new java.awt.Color(255, 0, 0));
-        NewEmployeebtn.setForeground(new java.awt.Color(153, 255, 255));
+        NewEmployeebtn.setBackground(new java.awt.Color(0, 204, 102));
+        NewEmployeebtn.setForeground(new java.awt.Color(255, 255, 255));
         NewEmployeebtn.setText("New Employee");
         NewEmployeebtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
