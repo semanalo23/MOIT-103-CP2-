@@ -22,6 +22,16 @@ public class MPH_EmployeeClassList {
     public static final int HOURLY_RATE_INDEX = 9;
 
     private String[] details;
+    private String employeeNumber;
+    private String lastName;
+    private String firstName;
+    private String sssNumber;
+    private String philHealth;
+    private String tin;
+    private String pagIbig;
+    private String dateOfBirth;
+    private String department;
+    private String hourlyRate;
 
     public MPH_EmployeeClassList(String employeeNumber, String lastName, String firstName,
             String sssNumber, String philHealthNumber, String tin,
@@ -79,5 +89,42 @@ public class MPH_EmployeeClassList {
 
     public String getHourlyRate() {
         return details[HOURLY_RATE_INDEX];
+    }
+    //Setter Methods for Updating:
+    
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setSssNumber(String sssNumber) {
+        this.sssNumber = sssNumber;
+    }
+
+    public void setPhilHealth(String philHealth) {
+        this.philHealth = philHealth;
+    }
+
+    public void setTin(String tin) {
+        this.tin = tin;
+    }
+
+    public void setPagIbig(String pagIbig) {
+        this.pagIbig = pagIbig;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public void setHourlyRate(String hourlyRate) {
+        this.hourlyRate = hourlyRate;
     }
 }
