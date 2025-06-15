@@ -10,17 +10,6 @@ package MotorPH_EmployeeAppGUI;
  */
 public class MPH_EmployeeClassList {
 
-    public static final int EMPLOYEE_NUMBER_INDEX = 0;
-    public static final int LAST_NAME_INDEX = 1;
-    public static final int FIRST_NAME_INDEX = 2;
-    public static final int SSS_NUMBER_INDEX = 3;
-    public static final int PHILHEALTH_INDEX = 4;
-    public static final int TIN_INDEX = 5;
-    public static final int PAGIBIG_INDEX = 6;
-    public static final int DOB_INDEX = 7;
-    public static final int DEPARTMENT_INDEX = 8;
-    public static final int HOURLY_RATE_INDEX = 9;
-
     private String[] details;
     private String employeeNumber;
     private String lastName;
@@ -36,62 +25,59 @@ public class MPH_EmployeeClassList {
     public MPH_EmployeeClassList(String employeeNumber, String lastName, String firstName,
             String sssNumber, String philHealthNumber, String tin,
             String pagIbigNumber, String dateOfBirth, String department, String hourlyRate) {
-        details = new String[10];
-        details[EMPLOYEE_NUMBER_INDEX] = employeeNumber;
-        details[LAST_NAME_INDEX] = lastName;
-        details[FIRST_NAME_INDEX] = firstName;
-        details[SSS_NUMBER_INDEX] = sssNumber;
-        details[PHILHEALTH_INDEX] = philHealthNumber;
-        details[TIN_INDEX] = tin;
-        details[PAGIBIG_INDEX] = pagIbigNumber;
-        details[DOB_INDEX] = dateOfBirth;
-        details[DEPARTMENT_INDEX] = department;
-        details[HOURLY_RATE_INDEX] = hourlyRate;
+        this.employeeNumber = employeeNumber;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.sssNumber = sssNumber;
+        this.philHealth = philHealthNumber;
+        this.tin = tin;
+        this.pagIbig = pagIbigNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.department = department;
+        this.hourlyRate = hourlyRate;
     }
-
-    // Getters:
-    public String getEmployeeNumber() {
-        return details[EMPLOYEE_NUMBER_INDEX];
+    //GETTERS
+   public String getEmployeeNumber() {
+        return employeeNumber;
     }
 
     public String getLastName() {
-        return details[LAST_NAME_INDEX];
+        return lastName;
     }
 
     public String getFirstName() {
-        return details[FIRST_NAME_INDEX];
+        return firstName;
     }
-
-    public String getSssNumber() {
-        return details[SSS_NUMBER_INDEX];
-    }
-
-    public String getPhilHealth() {
-        return details[PHILHEALTH_INDEX];
-    }
-
-    public String getTin() {
-        return details[TIN_INDEX];
-    }
-
-    public String getPagIbig() {
-        return details[PAGIBIG_INDEX];
-
-    }
-
-    public String getDateOfBirth() {
-        return details[DOB_INDEX];
-    }
-
-    public String getDepartment() {
-        return details[DEPARTMENT_INDEX];
-    }
-
-    public String getHourlyRate() {
-        return details[HOURLY_RATE_INDEX];
-    }
-    //Setter Methods for Updating:
     
+    public String getSssNumber() {
+        return sssNumber;
+    }
+    
+    public String getPhilHealth() {
+        return philHealth;
+    }
+    
+    public String getTin() {
+        return tin;
+    }
+    
+    public String getPagIbig() {
+        return pagIbig;
+    }
+    
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+    
+    public String getDepartment() {
+        return department;
+    }
+    
+    public String getHourlyRate() {
+        return hourlyRate;
+    }
+    
+    // Setters:
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }

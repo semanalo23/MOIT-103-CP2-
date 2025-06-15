@@ -138,20 +138,47 @@ public class MotorPH_EmployeeUpdateForm extends javax.swing.JFrame {
         txtHourlyRate.setText(employee.getHourlyRate());
     }
 
-    // This method is where you'd implement the update logic.
+    // UPDATE LOGIC
     private void updateRecord() {
-        // For now, simply display the updated data.
-        String updatedInfo = "First Name: " + txtFirstName.getText().trim() + "\n"
-                + "Last Name: " + txtLastName.getText().trim() + "\n"
-                + "SSS Number: " + txtSSS.getText().trim() + "\n"
-                + "PhilHealth: " + txtPhilHealth.getText().trim() + "\n"
-                + "TIN: " + txtTIN.getText().trim() + "\n"
-                + "Pag-IBIG: " + txtPagIbig.getText().trim() + "\n"
-                + "DOB: " + txtDOB.getText().trim() + "\n"
-                + "Department: " + txtDepartment.getText().trim() + "\n"
-                + "Hourly Rate: " + txtHourlyRate.getText().trim();
-        JOptionPane.showMessageDialog(this, "Updated Data:\n" + updatedInfo);
-        // Later, you can integrate database update logic here.
+        // Retrieve updated values from text fields:
+        String newFirstName = txtFirstName.getText().trim();
+        String newLastName = txtLastName.getText().trim();
+        String newSSS = txtSSS.getText().trim();
+        String newPhilHealth = txtPhilHealth.getText().trim();
+        String newTIN = txtTIN.getText().trim();
+        String newPagIbig = txtPagIbig.getText().trim();
+        String newDOB = txtDOB.getText().trim();
+        String newDepartment = txtDepartment.getText().trim();
+        String newHourlyRate = txtHourlyRate.getText().trim();
+
+        System.out.println("Update button clicked!");
+        System.out.println("Retrieved updated values: " + newFirstName + ", " + newLastName);
+
+        MPH_EmployeeManagerDatabase db = MPH_EmployeeManagerDatabase.getInstance();
+        boolean updated = db.updateEmployee(
+                employee.getEmployeeNumber(), // unique identifier
+                newLastName,
+                newFirstName,
+                newSSS,
+                newPhilHealth,
+                newTIN,
+                newPagIbig,
+                newDOB,
+                newDepartment,
+                newHourlyRate
+        );
+
+        System.out.println("Update status: " + updated);
+
+        if (updated) {
+            db.writeAllEmployeesToCSV(); // writes current in-memory list to CSV.
+            System.out.println("CSV file updated!");
+            JOptionPane.showMessageDialog(this, "Employee updated successfully.");
+            this.dispose(); // Close the update form.
+        } else {
+            JOptionPane.showMessageDialog(this, "Update failed.", "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Update failed!");
+        }
     }
 
     /**
@@ -182,18 +209,18 @@ public class MotorPH_EmployeeUpdateForm extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-     public static void main(String[] args) {
+    public static void main(String[] args) {
         // Create a dummy employee for testing.
         MPH_EmployeeClassList dummyEmployee = new MPH_EmployeeClassList(
-            "10001", "Doe", "John", "44-4506057-3",
-            "820126853951", "442-605-657-000",
-            "691295330870", "1980-01-01", "CEO", "50.0"
+                "10001", "Doe", "John", "44-4506057-3",
+                "820126853951", "442-605-657-000",
+                "691295330870", "1980-01-01", "CEO", "50.0"
         );
         SwingUtilities.invokeLater(() -> {
             new MotorPH_EmployeeUpdateForm(dummyEmployee).setVisible(true);
         });
     }
-    }
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

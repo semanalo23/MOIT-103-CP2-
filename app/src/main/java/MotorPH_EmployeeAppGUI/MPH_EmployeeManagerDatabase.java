@@ -21,28 +21,33 @@ public class MPH_EmployeeManagerDatabase {
 
     // The ArrayList holding all employee records.
     private List<MPH_EmployeeClassList> employees;
-    
-    public boolean updateEmployee(String empID, 
-                              String lastName, String firstName, 
-                              String sss, String philHealth, String tin,
-                              String pagIbig, String dob, 
-                              String department, String hourlyRate) {
-    for (MPH_EmployeeClassList emp : employees) {
-        if (emp.getEmployeeNumber().equals(empID)) {
-            emp.setLastName(lastName);
-            emp.setFirstName(firstName);
-            emp.setSssNumber(sss);
-            emp.setPhilHealth(philHealth);
-            emp.setTin(tin);
-            emp.setPagIbig(pagIbig);
-            emp.setDateOfBirth(dob);
-            emp.setDepartment(department);
-            emp.setHourlyRate(hourlyRate);
-            return true; // Update succeeded.
+
+    public boolean updateEmployee(String empID,
+            String lastName, String firstName,
+            String sss, String philHealth, String tin,
+            String pagIbig, String dob,
+            String department, String hourlyRate) {
+        System.out.println("Trying to update Employee ID: " + empID);
+
+        for (MPH_EmployeeClassList emp : employees) {
+            System.out.println("Checking Employee ID: " + emp.getEmployeeNumber());
+            if (emp.getEmployeeNumber().equals(empID)) {
+                System.out.println("Employee found! Updating...");
+                emp.setLastName(lastName);
+                emp.setFirstName(firstName);
+                emp.setSssNumber(sss);
+                emp.setPhilHealth(philHealth);
+                emp.setTin(tin);
+                emp.setPagIbig(pagIbig);
+                emp.setDateOfBirth(dob);
+                emp.setDepartment(department);
+                emp.setHourlyRate(hourlyRate);
+                System.out.println("After update, first name = " + emp.getFirstName());
+                return true; // Update succeeded.
+            }
         }
+        return false; // Employee not found.
     }
-    return false; // Employee not found.
-}
 
     // Constructor automatically initializes and loads data.
     public MPH_EmployeeManagerDatabase() {
@@ -282,37 +287,35 @@ public class MPH_EmployeeManagerDatabase {
         }
     }
     // Method to "refresh" the CSV - for updating and deleting:
-    
+
     public void writeAllEmployeesToCSV() {
-    String filePath = "employees.csv";
-    File csvFile = new File(filePath);
-    
-    try (FileWriter fw = new FileWriter(csvFile);
-         BufferedWriter bw = new BufferedWriter(fw);
-         PrintWriter out = new PrintWriter(bw)) {
+        String filePath = "employees.csv";
+        File csvFile = new File(filePath);
 
-         // Write the header line.
-         out.println("EmployeeID,LastName,FirstName,SSS,PhilHealth,TIN,PagIbig,DOB,Department,HourlyRate");
+        try (FileWriter fw = new FileWriter(csvFile); BufferedWriter bw = new BufferedWriter(fw); PrintWriter out = new PrintWriter(bw)) {
 
-         // Loop through the entire employee list.
-         for (MPH_EmployeeClassList emp : employees) {
-             out.println(emp.getEmployeeNumber() + ","
-                       + emp.getLastName() + ","
-                       + emp.getFirstName() + ","
-                       + emp.getSssNumber() + ","
-                       + emp.getPhilHealth() + ","
-                       + emp.getTin() + ","
-                       + emp.getPagIbig() + ","
-                       + emp.getDateOfBirth() + ","
-                       + emp.getDepartment() + ","
-                       + emp.getHourlyRate());
-         }
-    } catch (IOException e) {
-         e.printStackTrace();
-         // Consider handling the error by logging or alerting the user.
+            // Write the header line.
+            out.println("EmployeeID,LastName,FirstName,SSS,PhilHealth,TIN,PagIbig,DOB,Department,HourlyRate");
+
+            // Loop through the entire employee list.
+            for (MPH_EmployeeClassList emp : employees) {
+                out.println(emp.getEmployeeNumber() + ","
+                        + emp.getLastName() + ","
+                        + emp.getFirstName() + ","
+                        + emp.getSssNumber() + ","
+                        + emp.getPhilHealth() + ","
+                        + emp.getTin() + ","
+                        + emp.getPagIbig() + ","
+                        + emp.getDateOfBirth() + ","
+                        + emp.getDepartment() + ","
+                        + emp.getHourlyRate());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Consider handling the error by logging or alerting the user.
+        }
     }
-}
-    
+
     // Helper method to print employee details (for debugging/testing).
     public void printAllEmployees() {
         for (MPH_EmployeeClassList emp : employees) {
