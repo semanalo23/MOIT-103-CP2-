@@ -13,7 +13,7 @@ import javax.swing.ListSelectionModel;
  * @author ASPIRE 7
  */
 public class MotorPHEmployeeAppver2 extends javax.swing.JFrame {
-    
+
     private MPH_EmployeeTableModel_ArrayList employeeModel;
 
     /**
@@ -87,24 +87,31 @@ public class MotorPHEmployeeAppver2 extends javax.swing.JFrame {
 
     private void NewEmployeebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewEmployeebtnActionPerformed
         // TODO add your handling code here:
-             // Open the CreateEmployeeFrame when the button is clicked.
-    MotorPH_CreateEmployeeForm createFrame = new MotorPH_CreateEmployeeForm();
-    createFrame.setVisible(true);
+        // Open the CreateEmployeeFrame when the button is clicked.
+        MotorPH_CreateEmployeeForm createFrame = new MotorPH_CreateEmployeeForm();
+        createFrame.setVisible(true);
 
-    // Optional: add a WindowListener to refresh the table when createFrame is closed.
-    createFrame.addWindowListener(new java.awt.event.WindowAdapter() {
-        @Override
-        public void windowClosed(java.awt.event.WindowEvent e) {
-            // Refresh the JTable's model.
-            employeeModel.fireTableDataChanged();
-        }
-    });
+        // Add a WindowListener to refresh the JTable when createFrame is closed.
+        createFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                // Get the updated employee list from the database.
+                MPH_EmployeeManagerDatabase db = MPH_EmployeeManagerDatabase.getInstance();
+                employeeModel = new MPH_EmployeeTableModel_ArrayList(db.getEmployees());
+
+                // Get the JTable from the scroll pane and set the new model.
+                JTable employeeTable = (JTable) jScrollPane1.getViewport().getView();
+                if (employeeTable != null) {
+                    employeeTable.setModel(employeeModel);
+                }
+            }
+        });
     }//GEN-LAST:event_NewEmployeebtnActionPerformed
 
     private void initializeViewEmployee() {
         // Create your database manager and table model.
         MPH_EmployeeManagerDatabase db = new MPH_EmployeeManagerDatabase();
-        MPH_EmployeeTableModel_ArrayList employeeModel = new MPH_EmployeeTableModel_ArrayList(db.getEmployees());
+        employeeModel = new MPH_EmployeeTableModel_ArrayList(db.getEmployees());
 
         // Create the JTable with your custom table model.
         JTable employeeTable = new JTable(employeeModel);
@@ -121,13 +128,27 @@ public class MotorPHEmployeeAppver2 extends javax.swing.JFrame {
                         int modelRow = employeeTable.convertRowIndexToModel(selectedRow);
                         MPH_EmployeeClassList selectedEmployee = employeeModel.getEmployeeAt(modelRow);
                         // Open the details frame with compute pay functionality.
-                        new MotorPH_EmployeeDetails_withPay(selectedEmployee).setVisible(true);
+                        new MotorPH_EmployeeDetails_withPay(selectedEmployee, MotorPHEmployeeAppver2.this).setVisible(true);
                     }
                 }
             }
         });
         // Finally, attach the table to the scroll pane that you added via the GUI.
         jScrollPane1.setViewportView(employeeTable);
+    }
+//Helper Method to refresh for updates
+
+    public void refreshEmployeeTable() {
+        // Get the updated list from your database singleton.
+        MPH_EmployeeManagerDatabase db = MPH_EmployeeManagerDatabase.getInstance();
+        // Reinitialize the table model with the latest employee list.
+        employeeModel = new MPH_EmployeeTableModel_ArrayList(db.getEmployees());
+        // Retrieve the JTable from your scroll pane.
+        JTable employeeTable = (JTable) jScrollPane1.getViewport().getView();
+        if (employeeTable != null) {
+            employeeTable.setModel(employeeModel);
+        }
+        System.out.println("Employee table refreshed.");
     }
 
     /**

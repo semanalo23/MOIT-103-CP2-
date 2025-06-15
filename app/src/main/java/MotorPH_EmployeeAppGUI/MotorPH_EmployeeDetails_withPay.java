@@ -21,9 +21,11 @@ public class MotorPH_EmployeeDetails_withPay extends javax.swing.JFrame {
      * Creates new form MotorPH_EmployeeDetails_withPay
      */
     private MPH_EmployeeClassList employee;
+    private MotorPHEmployeeAppver2 mainFrame;
 
-    public MotorPH_EmployeeDetails_withPay(MPH_EmployeeClassList emp) {
+    public MotorPH_EmployeeDetails_withPay(MPH_EmployeeClassList emp, MotorPHEmployeeAppver2 mainFrame) {
         this.employee = emp;
+        this.mainFrame = mainFrame;
         initComponents();
         jComboBox1.setModel(new DefaultComboBoxModel<>(new String[]{
             "January", "February", "March", "April", "May", "June",
@@ -90,6 +92,8 @@ public class MotorPH_EmployeeDetails_withPay extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         updateRecordBtn = new javax.swing.JButton();
+        deleteRecordBtn = new javax.swing.JButton();
+        backBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -122,24 +126,45 @@ public class MotorPH_EmployeeDetails_withPay extends javax.swing.JFrame {
             }
         });
 
+        deleteRecordBtn.setBackground(new java.awt.Color(204, 51, 0));
+        deleteRecordBtn.setForeground(new java.awt.Color(255, 255, 255));
+        deleteRecordBtn.setText("Delete Employee Record");
+        deleteRecordBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteRecordBtnActionPerformed(evt);
+            }
+        });
+
+        backBtn.setText("Back");
+        backBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(updateRecordBtn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(updateRecordBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(deleteRecordBtn)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(backBtn)))
+                .addGap(14, 14, 14))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,7 +174,9 @@ public class MotorPH_EmployeeDetails_withPay extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(updateRecordBtn)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(updateRecordBtn)
+                    .addComponent(deleteRecordBtn))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -159,7 +186,9 @@ public class MotorPH_EmployeeDetails_withPay extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(backBtn))
                 .addGap(16, 16, 16))
         );
 
@@ -170,6 +199,60 @@ public class MotorPH_EmployeeDetails_withPay extends javax.swing.JFrame {
         // TODO add your handling code here:
         new MotorPH_EmployeeUpdateForm(employee).setVisible(true);
     }//GEN-LAST:event_updateRecordBtnActionPerformed
+
+    private void deleteRecordBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteRecordBtnActionPerformed
+        // TODO add your handling code here:
+        // Ask the user for deletion confirmation
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete this employee?",
+                "Confirm Delete",
+                JOptionPane.OK_CANCEL_OPTION);
+
+        if (confirm == JOptionPane.OK_OPTION) {
+            // Get the singleton instance of the database manager
+            MPH_EmployeeManagerDatabase db = MPH_EmployeeManagerDatabase.getInstance();
+
+            // Attempt to delete the employee using its unique identifier
+            boolean deleted = db.deleteEmployee(employee.getEmployeeNumber());
+
+            if (deleted) {
+                // Update the CSV file with the current in-memory list
+                db.writeAllEmployeesToCSV();
+
+                // Notify the user of successful deletion
+                JOptionPane.showMessageDialog(this,
+                        "Employee deleted successfully.",
+                        "Delete Successful",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                if (mainFrame != null) {
+                    mainFrame.refreshEmployeeTable();
+                }
+
+                //Close the details form if it is no longer needed
+                this.dispose();
+            } else {
+                // Notify the user that deletion failed.
+                JOptionPane.showMessageDialog(this,
+                        "Employee deletion failed.",
+                        "Delete Failed",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_deleteRecordBtnActionPerformed
+
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+        // TODO add your handling code here:
+        // Trigger a refresh of the employee table in the main frame.
+        if (mainFrame != null) {
+            mainFrame.refreshEmployeeTable();
+            // Optionally, if you had hidden the main frame when opening this window,
+            // ensure you show it here:
+            mainFrame.setVisible(true);
+        }
+        // Dispose the details form.
+        this.dispose();
+    }//GEN-LAST:event_backBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -207,12 +290,14 @@ public class MotorPH_EmployeeDetails_withPay extends javax.swing.JFrame {
                         "820126853951", "442-605-657-000",
                         "691295330870", "1980-01-01", "CEO", "50.0"
                 );
-                new MotorPH_EmployeeDetails_withPay(dummyEmployee).setVisible(true);
+                new MotorPH_EmployeeDetails_withPay(dummyEmployee, null).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backBtn;
+    private javax.swing.JButton deleteRecordBtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;

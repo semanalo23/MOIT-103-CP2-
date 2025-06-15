@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class MPH_EmployeeManagerDatabase {
@@ -47,6 +48,20 @@ public class MPH_EmployeeManagerDatabase {
             }
         }
         return false; // Employee not found.
+    }
+    public boolean deleteEmployee(String employeeNumber) {
+        // Using an iterator allows safe removal while looping.
+        Iterator<MPH_EmployeeClassList> iterator = employees.iterator();
+        while (iterator.hasNext()) {
+            MPH_EmployeeClassList emp = iterator.next();
+            if (emp.getEmployeeNumber().equals(employeeNumber)) {
+                System.out.println("Employee found! Deleting...");
+                iterator.remove();
+                return true;
+            }
+        }
+        System.out.println("Employee not found. Delete failed.");
+        return false;
     }
 
     // Constructor automatically initializes and loads data.
