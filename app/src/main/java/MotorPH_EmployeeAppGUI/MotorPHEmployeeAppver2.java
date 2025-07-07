@@ -189,7 +189,7 @@ public class MotorPHEmployeeAppver2 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MotorPHEmployeeAppver2().setVisible(true);
+                new MotorPH_EmpLoginFrame().setVisible(true);
             }
         });
     }
